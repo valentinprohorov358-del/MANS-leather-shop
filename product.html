@@ -251,20 +251,19 @@
     }
     
     function orderProduct() {
-      const orderText = `Я хочу заказать: ${currentProduct.name}\nЦена: ${currentProduct.price}₽`;
-      const telegramBotUsername = 'YOUR_BOT_USERNAME';
-      const encodedText = encodeURIComponent(orderText);
-      const telegramUrl = `https://t.me/${telegramBotUsername}?start=${encodedText}`;
-      
-      alert(`Заказ: ${currentProduct.name}\nЦена: ${currentProduct.price}₽\n\nПосле подтверждения откроется Telegram бот (функционал добавится позже)`);
-      
-      console.log('Product ordered:', {
-        id: currentProduct.id,
-        name: currentProduct.name,
-        price: currentProduct.price,
-        timestamp: new Date().toISOString()
-      });
-    }
+  const orderData = {
+    product_name: currentProduct.name,
+    product_id: currentProduct.id,
+    product_photo: currentProduct.images[0] || ''
+  };
+  
+  const message = JSON.stringify(orderData);
+  
+  // Открыть бот и отправить данные о заказе
+  window.open(`https://t.me/mans_leather_bot?start=${encodeURIComponent(message)}`);
+  
+  alert('🎉 Заказ отправлен! Открыются реквизиты для связи в Телеграм');
+}
     
     loadProduct();
   </script>
