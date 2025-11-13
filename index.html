@@ -175,8 +175,7 @@
             <div class="product-price">${p.price} ₽</div>
             <div class="product-desc">${p.description}</div>
             <div class="product-features">${p.features}</div>
-            <button class="buy-btn" onclick="buyProduct(${p.id}, '${p.name}')">Купить</button>
-          </div>
+            <button class="buy-btn" onclick="window.location.href='product.html?id=${p.id}'">Купить</button>          </div>
         </div>
       `).join('');
     }
