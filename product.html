@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Товар - MANS_leather</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #faf9f7; color: #333; }
+    
+    .header { background: #fff; padding: 16px; text-align: center; border-bottom: 1px solid #eee; }
+    .header h1 { font-size: 24px; margin-bottom: 4px; }
+    .back-btn { 
+      display: inline-block; 
+      padding: 8px 16px; 
+      background: #f0f0f0; 
+      border: none; 
+      border-radius: 6px; 
+      cursor: pointer; 
+      font-size: 14px;
+      margin-bottom: 16px;
+    }
+    .back-btn:hover { background: #e0e0e0; }
+    
+    .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+    
+    .gallery { margin-bottom: 30px; }
+    .gallery-main { width: 100%; height: 400px; background: #f0f0f0; border-radius: 12px; overflow: hidden; margin-bottom: 12px; }
+    .gallery-main img { width: 100%; height: 100%; object-fit: cover; }
+    
+    .gallery-thumbnails { display: flex; gap: 12px; overflow-x: auto; }
+    .gallery-thumb { 
+      width: 80px; 
+      height: 80px; 
+      background: #f0f0f0; 
+      border-radius: 8px; 
+      cursor: pointer; 
+      border: 2px solid transparent;
+      transition: border 0.3s;
+      flex-shrink: 0;
+    }
+    .gallery-thumb:hover,
+    .gallery-thumb.active { border-color: #393532; }
+    .gallery-thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: 6px; }
+    
+    .product-info { background: #fff; padding: 24px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .product-category { font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
+    .product-name { font-size: 28px; font-weight: 700; margin-bottom: 12px; }
+    .product-price { font-size: 32px; color: #1d8830; font-weight: 700; margin-bottom: 20px; }
+    
+    .product-description { margin-bottom: 20px; }
+    .product-description h3 { font-size: 16px; margin-bottom: 12px; }
+    .product-description p { font-size: 15px; color: #666; line-height: 1.6; margin-bottom: 12px; }
+    
+    .product-features { margin-bottom: 20px; }
+    .product-features h3 { font-size: 16px; margin-bottom: 12px; }
+    .product-features ul { list-style: none; }
+    .product-features li { font-size: 14px; color: #666; padding: 8px 0; border-bottom: 1px solid #eee; }
+    .product-features li:last-child { border-bottom: none; }
+    
+    .order-btn { 
+      width: 100%; 
+      padding: 16px 24px; 
+      background: #393532; 
+      color: #fff; 
+      border: none; 
+      border-radius: 8px; 
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .order-btn:hover { background: #5a5450; }
+    .order-btn:active { transform: scale(0.98); }
+    
+    @media (max-width: 600px) {
+      .header h1 { font-size: 20px; }
+      .product-name { font-size: 22px; }
+      .product-price { font-size: 24px; }
+      .gallery-main { height: 300px; }
+      .gallery-thumbnails { flex-wrap: wrap; }
+      .gallery-thumb { width: 60px; height: 60px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <button class="back-btn" onclick="goBack()">← Назад к каталогу</button>
+  </div>
+  
+  <div class="container">
+    <div class="gallery">
+      <div class="gallery-main">
+        <img id="main-image" src="https://via.placeholder.com/800x400?text=Кожаный+кошелек+Классик" alt="Основное фото">
+      </div>
+      <div class="gallery-thumbnails" id="thumbnails"></div>
+    </div>
+    
+    <div class="product-info">
+      <div class="product-category" id="category">категория</div>
+      <h1 class="product-name" id="product-name">Название товара</h1>
+      <div class="product-price" id="price">0 ₽</div>
+      
+      <div class="product-description">
+        <h3>Описание</h3>
+        <p id="description">Описание товара</p>
+      </div>
+      
+      <div class="product-features">
+        <h3>Характеристики</h3>
+        <ul id="features"></ul>
+      </div>
+      
+      <button class="order-btn" onclick="orderProduct()">📦 Заказать через Telegram</button>
+    </div>
+  </div>
+  
+  <script>
+    const products = [
+      {
+        id: 1,
+        name: "Кожаный кошелек Классик",
+        category: "кошельки",
+        price: 2500,
+        description: "Элегантный кошелек из натуральной коровьей кожи. Прочный, практичный и стильный аксессуар для повседневного использования. Каждый кошелек изготавливается вручную с любовью и вниманием к деталям.",
+        features: [
+          "Размер: 10×9 см",
+          "Материал: натуральная коровья кожа",
+          "Цвет: коричневый",
+          "Отделения: 3 кармана для карт, 1 основной отдел",
+          "Ручная работа"
+        ],
+        images: [
+          "https://via.placeholder.com/800x400?text=Кошелек+1",
+          "https://via.placeholder.com/800x400?text=Кошелек+2",
+          "https://via.placeholder.com/800x400?text=Кошелек+3"
+        ]
+      },
+      {
+        id: 2,
+        name: "Кожаная сумка A5",
+        category: "сумки",
+        price: 6500,
+        description: "Премиальная сумка из натуральной итальянской кожи. Идеальна для документов, планшета или ежедневных вещей. Компактная, но вместительная. Подойдет как для работы, так и для повседневных выходов.",
+        features: [
+          "Размер: 23×18 см",
+          "Материал: итальянская натуральная кожа",
+          "Цвет: черный",
+          "Ручки: кожаные, регулируемые",
+          "Внутренние карманы: 2 шт",
+          "Ручная работа, уникален"
+        ],
+        images: [
+          "https://via.placeholder.com/800x400?text=Сумка+1",
+          "https://via.placeholder.com/800x400?text=Сумка+2",
+          "https://via.placeholder.com/800x400?text=Сумка+3"
+        ]
+      },
+      {
+        id: 3,
+        name: "Кожаный ремень Минимум",
+        category: "ремни",
+        price: 1800,
+        description: "Надежный ремень из натуральной кожи для повседневного использования. Простой дизайн, качественное исполнение. Прослужит много лет благодаря долговечности материала.",
+        features: [
+          "Ширина: 3.5 см",
+          "Материал: натуральная кожа",
+          "Цвет: коричневый",
+          "Пряжка: металлическая, прочная",
+          "Длина: регулируемая",
+          "Ручная обработка краев"
+        ],
+        images: [
+          "https://via.placeholder.com/800x400?text=Ремень+1",
+          "https://via.placeholder.com/800x400?text=Ремень+2",
+          "https://via.placeholder.com/800x400?text=Ремень+3"
+        ]
+      },
+      {
+        id: 4,
+        name: "Брелок Компас",
+        category: "аксессуары",
+        price: 450,
+        description: "Изящный брелок с кожаным чехлом. Компактный размер, идеален для ключей. Оригинальный подарок для путешественников и любителей приключений.",
+        features: [
+          "Размер: 4×4 см",
+          "Материал: кожа + метал",
+          "Цвет: коричневый",
+          "Функция: действующий компас",
+          "Вес: 30 г",
+          "В комплекте: кожаный чехол"
+        ],
+        images: [
+          "https://via.placeholder.com/800x400?text=Брелок+1",
+          "https://via.placeholder.com/800x400?text=Брелок+2",
+          "https://via.placeholder.com/800x400?text=Брелок+3"
+        ]
+      }
+    ];
+    
+    let currentProduct = null;
+    let currentImageIndex = 0;
+    
+    function getProductIdFromURL() {
+      const params = new URLSearchParams(window.location.search);
+      return parseInt(params.get('id')) || 1;
+    }
+    
+    function loadProduct() {
+      const productId = getProductIdFromURL();
+      currentProduct = products.find(p => p.id === productId);
+      
+      if (!currentProduct) {
+        currentProduct = products[0];
+      }
+      
+      renderProduct();
+    }
+    
+    function renderProduct() {
+      document.getElementById('category').textContent = currentProduct.category.toUpperCase();
+      document.getElementById('product-name').textContent = currentProduct.name;
+      document.getElementById('price').textContent = currentProduct.price + ' ₽';
+      document.getElementById('description').textContent = currentProduct.description;
+      
+      const featuresList = document.getElementById('features');
+      featuresList.innerHTML = currentProduct.features.map(f => `<li>✓ ${f}</li>`).join('');
+      
+      renderGallery();
+    }
+    
+    function renderGallery() {
+      const mainImg = document.getElementById('main-image');
+      mainImg.src = currentProduct.images[currentImageIndex];
+      
+      const thumbnails = document.getElementById('thumbnails');
+      thumbnails.innerHTML = currentProduct.images.map((img, idx) => `
+        <div class="gallery-thumb ${idx === currentImageIndex ? 'active' : ''}" onclick="switchImage(${idx})">
+          <img src="${img}" alt="Фото ${idx + 1}">
+        </div>
+      `).join('');
+    }
+    
+    function switchImage(index) {
+      currentImageIndex = index;
+      renderGallery();
+    }
+    
+    function goBack() {
+      window.location.href = 'index.html';
+    }
+    
+    function orderProduct() {
+      const orderText = `Я хочу заказать: ${currentProduct.name}\nЦена: ${currentProduct.price}₽`;
+      const telegramBotUsername = 'YOUR_BOT_USERNAME';
+      const encodedText = encodeURIComponent(orderText);
+      const telegramUrl = `https://t.me/${telegramBotUsername}?start=${encodedText}`;
+      
+      alert(`Заказ: ${currentProduct.name}\nЦена: ${currentProduct.price}₽\n\nПосле подтверждения откроется Telegram бот (функционал добавится позже)`);
+      
+      console.log('Product ordered:', {
+        id: currentProduct.id,
+        name: currentProduct.name,
+        price: currentProduct.price,
+        timestamp: new Date().toISOString()
+      });
+    }
+    
+    loadProduct();
+  </script>
+</body>
+</html>
