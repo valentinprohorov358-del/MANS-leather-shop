@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MANS_leather - Каталог</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #faf9f7; color: #333; }
+    
+    .header { 
+      background: #fff; 
+      padding: 20px; 
+      text-align: center; 
+      border-bottom: 1px solid #eee;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+    .header h1 { font-size: 28px; font-weight: 600; margin-bottom: 8px; }
+    .header p { font-size: 14px; color: #888; }
+    
+    .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+    
+    .categories { 
+      display: flex; 
+      gap: 12px; 
+      margin-bottom: 40px; 
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .cat-btn { 
+      padding: 10px 24px; 
+      border: 2px solid #ddd; 
+      background: #fff; 
+      border-radius: 8px; 
+      cursor: pointer; 
+      font-size: 16px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+    .cat-btn:hover { border-color: #393532; background: #f5f5f5; }
+    .cat-btn.active { background: #393532; color: #fff; border-color: #393532; }
+    
+    .products { 
+      display: grid; 
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+      gap: 30px;
+      margin-top: 30px;
+    }
+    
+    .product-card { 
+      background: #fff; 
+      border-radius: 12px; 
+      overflow: hidden; 
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+    }
+    .product-card:hover { 
+      transform: translateY(-8px); 
+      box-shadow: 0 8px 16px rgba(0,0,0,0.12);
+    }
+    
+    .product-image { 
+      width: 100%; 
+      height: 240px; 
+      background: #f0f0f0; 
+      object-fit: cover; 
+    }
+    
+    .product-info { padding: 20px; }
+    .product-category { font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 1px; }
+    .product-name { font-size: 18px; font-weight: 600; margin: 12px 0 8px; }
+    .product-price { font-size: 20px; color: #1d8830; font-weight: 700; margin-bottom: 12px; }
+    .product-desc { font-size: 14px; color: #666; line-height: 1.5; margin-bottom: 16px; }
+    .product-features { font-size: 13px; color: #888; margin-bottom: 16px; }
+    
+    .buy-btn { 
+      width: 100%; 
+      padding: 12px 24px; 
+      background: #393532; 
+      color: #fff; 
+      border: none; 
+      border-radius: 6px; 
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .buy-btn:hover { background: #5a5450; }
+    
+    .empty { text-align: center; padding: 60px 20px; color: #999; }
+    
+    @media (max-width: 768px) {
+      .header h1 { font-size: 24px; }
+      .products { grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; }
+      .categories { justify-content: flex-start; overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>MANS_leather</h1>
+    <p>Премиальные кожаные изделия ручной работы</p>
+  </div>
+  
+  <div class="container">
+    <div class="categories">
+      <button class="cat-btn active" onclick="filterCategory('all')">Все товары</button>
+      <button class="cat-btn" onclick="filterCategory('wallets')">💳 Кошельки</button>
+      <button class="cat-btn" onclick="filterCategory('bags')">👜 Сумки</button>
+      <button class="cat-btn" onclick="filterCategory('belts')">⌛ Ремни</button>
+      <button class="cat-btn" onclick="filterCategory('accessories')">🎀 Аксессуары</button>
+    </div>
+    
+    <div class="products" id="products-list"></div>
+  </div>
+  
+  <script>
+    const products = [
+      {
+        id: 1,
+        name: "Кожаный кошелек Классик",
+        category: "wallets",
+        price: 2500,
+        description: "Элегантный кошелек из натуральной коровьей кожи",
+        features: "Размер: 10х9 см | Материал: кожа",
+        hashtags: "#leather-wallet #handmade"
+      },
+      {
+        id: 2,
+        name: "Кожаная сумка A5",
+        category: "bags",
+        price: 6500,
+        description: "Премиальная сумка из натуральной итальянской кожи",
+        features: "Размер: 23х18 см | Материал: кожа",
+        hashtags: "#leather-bag #genuine-leather"
+      },
+      {
+        id: 3,
+        name: "Кожаный ремень Минимум",
+        category: "belts",
+        price: 1800,
+        description: "Надежный ремень для повседневного использования",
+        features: "Ширина: 3.5 см | Материал: натуральная кожа",
+        hashtags: "#leather-belt #genuine-leather"
+      },
+      {
+        id: 4,
+        name: "Брелок Компас",
+        category: "accessories",
+        price: 450,
+        description: "Изящный брелок с кожаным чехлом",
+        features: "Размер: 4х4 см | Материал: кожа",
+        hashtags: "#leather-keychain #accessories"
+      }
+    ];
+    
+    function renderProducts(category) {
+      const container = document.getElementById('products-list');
+      const filtered = category === 'all' 
+        ? products 
+        : products.filter(p => p.category === category);
+      
+      if (filtered.length === 0) {
+        container.innerHTML = '<div class="empty" style="grid-column: 1/-1;">Товары в этой категории пока не добавлены</div>';
+        return;
+      }
+      
+      container.innerHTML = filtered.map(p => `
+        <div class="product-card">
+          <img src="https://via.placeholder.com/300x240?text=${encodeURIComponent(p.name)}" alt="${p.name}" class="product-image">
+          <div class="product-info">
+            <div class="product-category">${p.category}</div>
+            <div class="product-name">${p.name}</div>
+            <div class="product-price">${p.price} ₽</div>
+            <div class="product-desc">${p.description}</div>
+            <div class="product-features">${p.features}</div>
+            <button class="buy-btn" onclick="buyProduct(${p.id}, '${p.name}')">Купить</button>
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function filterCategory(category) {
+      document.querySelectorAll('.cat-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      renderProducts(category);
+    }
+    
+    function buyProduct(id, name) {
+      alert(`Товар "${name}" добавлен в корзину!\n\nПовторите попытку позже для интеграции с Telegram Bot API.`);
+      console.log(`Товар ${id} добавлен в корзину`);
+    }
+    
+    // Инициализация при загрузке
+    renderProducts('all');
+  </script>
+</body>
+</html>
